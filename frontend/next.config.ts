@@ -1,0 +1,11 @@
+import type { NextConfig } from "next";
+
+const nextConfig: any = {
+  output: "export",
+  devIndicators: {
+    appIsrStatus: false,
+    buildActivity: false,
+  },
+};
+
+export default nextConfig;

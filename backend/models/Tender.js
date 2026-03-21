@@ -91,7 +91,7 @@ const tenderSchema = new mongoose.Schema({
   }
 });
 
-tenderSchema.pre('save', function(next) {
+tenderSchema.pre('save', function () {
   this.updatedAt = new Date();
 });
 

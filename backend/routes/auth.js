@@ -8,7 +8,21 @@ const path = require('path');
 const fs = require('fs');
 const User = require('../models/User');
 
+const auth = require('../middleware/auth');
+
 const router = express.Router();
+
+// @route   GET /api/auth/users
+// @desc    Get all users for assignment (Authenticated only)
+router.get('/users', auth, async (req, res) => {
+  try {
+    const users = await User.find().select('name email role');
+    res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
 
 // Configure multer for avatar uploads
 const avatarStorage = multer.diskStorage({
@@ -56,7 +70,7 @@ const sendPasswordResetEmail = async (email, resetToken) => {
   const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
   const user = await User.findOne({ email });
   const name = user.name;
-  
+
   const mailOptions = {
     from: process.env.SMTP_USER,
     to: email,
@@ -94,8 +108,8 @@ const sendPasswordResetEmail = async (email, resetToken) => {
 
 // Register user - RESTRICTED TO ADMIN ONLY
 router.post('/register', async (req, res) => {
-  return res.status(403).json({ 
-    msg: 'Public registration is disabled. Please contact an administrator to create your account.' 
+  return res.status(403).json({
+    msg: 'Public registration is disabled. Please contact an administrator to create your account.'
   });
 });
 
@@ -112,7 +126,7 @@ router.post('/login', async (req, res) => {
 
     // Check if user is Keycloak-linked (cannot login with password)
     if (user.authProvider === 'keycloak') {
-      return res.status(400).json({ 
+      return res.status(400).json({
         msg: 'This account uses Keycloak for authentication. Please login with Keycloak.',
         requiresKeycloak: true,
         authProvider: 'keycloak'
@@ -121,7 +135,7 @@ router.post('/login', async (req, res) => {
 
     // Check if user has a password (legacy accounts might not)
     if (!user.password) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         msg: 'This account does not have a password set. Please login with Keycloak or contact admin.',
         requiresKeycloak: true
       });
@@ -146,7 +160,7 @@ router.post('/login', async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRE || '7d' },
       (err, token) => {
         if (err) throw err;
-        res.json({ 
+        res.json({
           token,
           user: {
             id: user.id,
@@ -174,14 +188,14 @@ router.post('/forgot-password', async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       // Don't reveal whether email exists or not for security
-      return res.status(200).json({ 
-        msg: 'If an account with that email exists, we have sent a password reset link.' 
+      return res.status(200).json({
+        msg: 'If an account with that email exists, we have sent a password reset link.'
       });
     }
 
     // Check if user is Keycloak-linked (cannot reset password)
     if (user.authProvider === 'keycloak') {
-      return res.status(400).json({ 
+      return res.status(400).json({
         msg: 'This account uses Keycloak for authentication. Please reset your password through Keycloak.',
         requiresKeycloak: true
       });
@@ -199,8 +213,8 @@ router.post('/forgot-password', async (req, res) => {
     // Send reset email
     await sendPasswordResetEmail(email, resetToken);
 
-    res.status(200).json({ 
-      msg: 'If an account with that email exists, we have sent a password reset link.' 
+    res.status(200).json({
+      msg: 'If an account with that email exists, we have sent a password reset link.'
     });
 
   } catch (err) {
@@ -227,7 +241,7 @@ router.post('/reset-password/:token', async (req, res) => {
 
     // Check if user is Keycloak-linked (cannot reset password)
     if (user.authProvider === 'keycloak') {
-      return res.status(400).json({ 
+      return res.status(400).json({
         msg: 'This account uses Keycloak for authentication. Please reset your password through Keycloak.',
         requiresKeycloak: true
       });
@@ -236,11 +250,11 @@ router.post('/reset-password/:token', async (req, res) => {
     // Hash new password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
-    
+
     // Clear reset token and expiry
     user.resetToken = null;
     user.resetTokenExpiry = null;
-    
+
     await user.save();
 
     res.status(200).json({ msg: 'Password reset successful' });
@@ -256,21 +270,21 @@ router.get('/verify', async (req, res) => {
   try {
     // Get token from header
     const token = req.header('Authorization')?.replace('Bearer ', '');
-    
+
     if (!token) {
       return res.status(401).json({ msg: 'No token, authorization denied' });
     }
 
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
+
     // Get user from token
     const user = await User.findById(decoded.user.id).select('-password');
     if (!user) {
       return res.status(401).json({ msg: 'Token is not valid' });
     }
 
-    res.json({ 
+    res.json({
       user,
       authProvider: user.authProvider || 'local'
     });
@@ -284,14 +298,14 @@ router.get('/verify', async (req, res) => {
 router.get('/me', async (req, res) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
-    
+
     if (!token) {
       return res.status(401).json({ msg: 'No token, authorization denied' });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.user.id).select('-password');
-    
+
     if (!user) {
       return res.status(404).json({ msg: 'User not found' });
     }
@@ -307,13 +321,13 @@ router.get('/me', async (req, res) => {
 router.put('/profile', async (req, res) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
-    
+
     if (!token) {
       return res.status(401).json({ msg: 'No token, authorization denied' });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
+
     const {
       name,
       phone,
@@ -343,7 +357,7 @@ router.put('/profile', async (req, res) => {
     };
 
     // Remove undefined fields
-    Object.keys(updateData).forEach(key => 
+    Object.keys(updateData).forEach(key =>
       updateData[key] === undefined && delete updateData[key]
     );
 
@@ -367,7 +381,7 @@ router.put('/profile', async (req, res) => {
 router.put('/avatar', avatarUpload.single('avatar'), async (req, res) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
-    
+
     if (!token) {
       return res.status(401).json({ msg: 'No token, authorization denied' });
     }
@@ -404,7 +418,7 @@ router.put('/avatar', avatarUpload.single('avatar'), async (req, res) => {
 router.put('/password', async (req, res) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
-    
+
     if (!token) {
       return res.status(401).json({ msg: 'No token, authorization denied' });
     }
@@ -417,7 +431,7 @@ router.put('/password', async (req, res) => {
 
     // Check if user is Keycloak-linked (cannot change password here)
     if (user.authProvider === 'keycloak') {
-      return res.status(400).json({ 
+      return res.status(400).json({
         msg: 'This account uses Keycloak for authentication. Please change your password through Keycloak.',
         requiresKeycloak: true
       });
@@ -432,7 +446,7 @@ router.put('/password', async (req, res) => {
     // Hash new password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
-    
+
     await user.save();
 
     res.json({ msg: 'Password updated successfully' });

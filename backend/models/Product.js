@@ -159,7 +159,7 @@ const productSchema = new mongoose.Schema({
 });
 
 // Update the updatedAt field before saving
-productSchema.pre('save', function(next) {
+productSchema.pre('save', function () {
   this.updatedAt = Date.now();
 });
 

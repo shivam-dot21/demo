@@ -1,6 +1,8 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "author": "Shivam Nishad",
+  "license": "MIT",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,14 +11,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
   "type": "commonjs",
-  "dependencies": {
+  "dependencies": { 
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "jsonwebtoken": "^9.0.3",
     "keycloak-admin-client": "^0.12.0",
     "keycloak-connect": "^26.1.1",

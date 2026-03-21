@@ -26,6 +26,7 @@ import ResetPassword from "./components/ResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 import About from "./components/About";
+import Task from "./components/Task";
 
 function App() {
   return (
@@ -40,7 +41,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
-        
+
           {/* PROTECTED ROUTES */}
           <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
             <Route index element={<Homepage />} />
@@ -59,6 +60,7 @@ function App() {
             <Route path="notes" element={<Notes />} />
             <Route path="about" element={<About />} />
             <Route path="admin" element={<AdminPanel />} />
+            <Route path="task" element={<Task />} />
           </Route>
         </Routes>
       </BrowserRouter>

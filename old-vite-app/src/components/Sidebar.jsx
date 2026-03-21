@@ -1,7 +1,8 @@
 
 import { useNavigate } from "react-router-dom";
-import { FaHome, FaBox, FaListAlt, FaShoppingCart, FaUsers, FaChartLine, FaCog, FaQuestionCircle, FaInfoCircle, FaUserShield } from "react-icons/fa";
+import { FaHome, FaBox, FaListAlt, FaShoppingCart, FaUsers, FaChartLine, FaCog, FaQuestionCircle, FaInfoCircle, FaUserShield, FaTasks } from "react-icons/fa";
 import { SiMarketo } from "react-icons/si";
+import { TbReportSearch } from "react-icons/tb";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -16,8 +17,9 @@ function Sidebar({ isOpen }) {
         { name: "Orders", icon: <FaShoppingCart />, path: "/orders" },
         { name: "Tenders", icon: <SiMarketo />, path: "/tenders" },
         { name: "Products", icon: <FaListAlt />, path: "/products" },
+        { name: "Task", icon: <FaTasks />, path: "/task" },
         { name: "Customers", icon: <FaUsers />, path: "/customers" },
-        { name: "Reports", icon: <FaChartLine />, path: "/reports" },
+        { name: "Reports", icon: <TbReportSearch />, path: "/reports" },
         { name: "Analytics", icon: <FaChartLine />, path: "/analytics" },
         { name: "About", icon: <FaInfoCircle />, path: "/about" },
         { name: "Support", icon: <FaQuestionCircle />, path: "/support" },

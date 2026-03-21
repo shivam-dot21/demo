@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'employee', 'manager'],
+    enum: ['admin', 'employee', 'manager', 'tl'],
     default: 'employee',
   },
   // Keycloak authentication fields
@@ -99,7 +99,7 @@ const userSchema = new mongoose.Schema({
 });
 
 // Update the updatedAt field before saving
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function () {
   this.updatedAt = Date.now();
 });
 
