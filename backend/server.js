@@ -73,8 +73,14 @@ if (keycloakMiddleware) {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/customers', require('./routes/customers'));
+app.use('/api/leads', require('./routes/leads'));
+app.use('/api/deals', require('./routes/deals'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/orders', require('./routes/orders'));
+app.use('/api/activities', require('./routes/activities'));
+app.use('/api/invoices', require('./routes/invoices'));
+app.use('/api/tickets', require('./routes/tickets'));
+app.use('/api/email-templates', require('./routes/emailTemplates'));
 
 app.use('/api/inventory', require('./routes/inventory'));
 

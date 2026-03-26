@@ -83,4 +83,51 @@ router.get('/sales', auth, async (req, res) => {
   }
 });
 
+// Export Data
+router.get('/export', auth, async (req, res) => {
+  try {
+    const { Parser } = require('json2csv');
+    const { type } = req.query;
+    let data;
+    
+    if (type === 'customers') {
+      const customers = await Customer.find().lean();
+      data = customers.map(c => ({
+        Name: c.name, Email: c.email, Status: c.status, 
+        Segment: c.segment || '', Tags: c.tags?.join(', ') || ''
+      }));
+    } else if (type === 'orders') {
+      const orders = await Order.find().populate('customer', 'name').lean();
+      data = orders.map(o => ({
+        OrderNumber: o.orderNumber, Customer: o.customer?.name || '', 
+        Status: o.status, Total: o.totalAmount, Date: o.createdAt
+      }));
+    } else if (type === 'inventory') {
+      const Inventory = require('../models/Inventory');
+      const inventory = await Inventory.find().populate('product', 'name').lean();
+      data = inventory.map(i => ({
+        Product: i.product?.name || '', SKU: i.sku || '', 
+        Quantity: i.quantity, ReorderPoint: i.reorderPoint
+      }));
+    } else {
+      return res.status(400).json({ msg: 'Invalid export type' });
+    }
+
+    if (!data || data.length === 0) {
+      return res.status(404).json({ msg: 'No data found to export' });
+    }
+
+    const parser = new Parser();
+    const csv = parser.parse(data);
+
+    res.header('Content-Type', 'text/csv');
+    res.attachment(`${type}_export_${new Date().toISOString().split('T')[0]}.csv`);
+    return res.send(csv);
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error during export');
+  }
+});
+
 module.exports = router;

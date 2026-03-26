@@ -1,151 +1,107 @@
 const express = require('express');
-const router = express.Router();
 const auth = require('../middleware/auth');
-const Task = require('../models/Tasks');
-const User = require('../models/User');
+const Task = require('../models/Task');
 
-// Helper function to update parent progress
-const updateParentProgress = async (parentId) => {
-    if (!parentId) return;
+const router = express.Router();
 
-    const subtasks = await Task.find({ parentTask: parentId });
-    if (subtasks.length === 0) return;
-
-    const totalProgress = subtasks.reduce((sum, task) => sum + (task.progress || 0), 0);
-    const averageProgress = Math.round(totalProgress / subtasks.length);
-
-    const parent = await Task.findById(parentId);
-    if (parent) {
-        parent.progress = averageProgress;
-        if (averageProgress === 100) {
-            parent.status = 'Completed';
-        } else if (averageProgress > 0) {
-            parent.status = 'In Progress';
-        }
-        await parent.save();
-
-        // Recursively update upwards
-        if (parent.parentTask) {
-            await updateParentProgress(parent.parentTask);
-        }
-    }
-};
-
-// @route   GET api/tasks
-// @desc    Get all tasks based on user role
+// Get all tasks
 router.get('/', auth, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id);
-        let query = {};
+  try {
+    const { status, priority, assignedTo, relatedTo } = req.query;
+    let query = {};
+    if (status) query.status = status;
+    if (priority) query.priority = priority;
+    if (assignedTo) query.assignedTo = assignedTo;
+    
+    // Check overdue logic locally on frontend or parse date
 
-        if (user.role === 'admin') {
-            // Admin sees everything
-            query = {};
-        } else if (user.role === 'manager') {
-            // Manager sees tasks they created or are assigned to
-            query = { $or: [{ user: req.user.id }, { assignedTo: req.user.id }] };
-        } else if (user.role === 'tl' || user.role === 'employee') {
-            // TL and Employee see tasks assigned to them
-            query = { assignedTo: req.user.id };
-        }
-
-        const tasks = await Task.find(query)
-            .populate('assignedTo', 'name email role')
-            .populate('assignedBy', 'name email role')
-            .sort({ createdAt: -1 });
-        res.json(tasks);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
+    const tasks = await Task.find(query).populate('assignedTo', 'name').sort({ dueDate: 1 });
+    res.json(tasks);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
 });
 
-// @route   POST api/tasks
-// @desc    Create a task
+// Get today's tasks
+router.get('/today', auth, async (req, res) => {
+  try {
+    const start = new Date();
+    start.setHours(0,0,0,0);
+    const end = new Date();
+    end.setHours(23,59,59,999);
+
+    const tasks = await Task.find({
+      dueDate: { $gte: start, $lte: end }
+    }).populate('assignedTo', 'name').sort({ dueTime: 1 });
+    res.json(tasks);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// Get overdue tasks
+router.get('/overdue', auth, async (req, res) => {
+  try {
+    const now = new Date();
+    const tasks = await Task.find({
+      dueDate: { $lt: now },
+      status: { $nin: ['completed', 'cancelled'] }
+    }).populate('assignedTo', 'name').sort({ dueDate: 1 });
+    res.json(tasks);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// Create task
 router.post('/', auth, async (req, res) => {
-    try {
-        const { title, description, assignedTo, parentTask, priority, dueDate, color } = req.body;
-
-        const newTask = new Task({
-            title,
-            description,
-            user: req.user.id,
-            assignedBy: req.user.id,
-            assignedTo,
-            parentTask,
-            priority,
-            dueDate,
-            color
-        });
-
-        const task = await newTask.save();
-
-        if (parentTask) {
-            await updateParentProgress(parentTask);
-        }
-
-        res.json(task);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
+  try {
+    const task = new Task(req.body);
+    await task.save();
+    res.json(task);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
 });
 
-// @route   PUT api/tasks/:id
-// @desc    Update a task
+// Update task
 router.put('/:id', auth, async (req, res) => {
-    try {
-        const { title, description, status, priority, progress, dueDate, color, assignedTo } = req.body;
-
-        let task = await Task.findById(req.params.id);
-        if (!task) return res.status(404).json({ msg: 'Task not found' });
-
-        // Update fields
-        if (title) task.title = title;
-        if (description !== undefined) task.description = description;
-        if (status) task.status = status;
-        if (priority) task.priority = priority;
-        if (progress !== undefined) task.progress = progress;
-        if (dueDate) task.dueDate = dueDate;
-        if (color) task.color = color;
-        if (assignedTo) task.assignedTo = assignedTo;
-
-        await task.save();
-
-        if (task.parentTask) {
-            await updateParentProgress(task.parentTask);
-        }
-
-        res.json(task);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
+  try {
+    const task = await Task.findByIdAndUpdate(req.params.id, { ...req.body, updatedAt: Date.now() }, { new: true });
+    if (!task) return res.status(404).json({ msg: 'Task not found' });
+    res.json(task);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
 });
 
-// @route   DELETE api/tasks/:id
-// @desc    Delete a task
+// Complete task
+router.put('/:id/complete', auth, async (req, res) => {
+  try {
+    const task = await Task.findByIdAndUpdate(req.params.id, { status: 'completed', completedAt: Date.now() }, { new: true });
+    if (!task) return res.status(404).json({ msg: 'Task not found' });
+    res.json(task);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// Delete task
 router.delete('/:id', auth, async (req, res) => {
-    try {
-        const task = await Task.findById(req.params.id);
-        if (!task) return res.status(404).json({ msg: 'Task not found' });
-
-        const parentId = task.parentTask;
-        await Task.findByIdAndDelete(req.params.id);
-
-        // Also delete subtasks recursively? For now, just orphan them or delete.
-        // Let's delete subtasks for cleanliness.
-        await Task.deleteMany({ parentTask: req.params.id });
-
-        if (parentId) {
-            await updateParentProgress(parentId);
-        }
-
-        res.json({ msg: 'Task removed' });
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
+  try {
+    const task = await Task.findByIdAndDelete(req.params.id);
+    if (!task) return res.status(404).json({ msg: 'Task not found' });
+    res.json({ msg: 'Task deleted' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
 });
 
-module.exports = router;    
+module.exports = router;

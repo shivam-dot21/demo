@@ -7,7 +7,15 @@ const router = express.Router();
 // Get all customers with metrics
 router.get('/', auth, async (req, res) => {
   try {
-    const customers = await Customer.find().sort({ createdAt: -1 });
+    const { tags, segment, industry, companySize, region } = req.query;
+    let query = {};
+    if (tags) query.tags = { $in: tags.split(',') };
+    if (segment) query.segment = segment;
+    if (industry) query.industry = industry;
+    if (companySize) query.companySize = companySize;
+    if (region) query.region = region;
+
+    const customers = await Customer.find(query).sort({ createdAt: -1 });
     
     // Get order statistics for each customer
     const Order = require('../models/Order');
@@ -102,6 +110,84 @@ router.delete('/:id', auth, async (req, res) => {
     res.json({ msg: 'Customer deleted' });
   } catch (err) {
     console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// Get customer timeline
+router.get('/:id/timeline', auth, async (req, res) => {
+  try {
+    const Activity = require('../models/Activity');
+    const page = parseInt(req.query.page) || 1;
+    const limit = 20;
+    const skip = (page - 1) * limit;
+
+    const activities = await Activity.find({
+      'relatedTo.model': 'Customer',
+      'relatedTo.id': req.params.id
+    })
+    .populate('performedBy', 'name')
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+    res.json(activities);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// Segments and Tags logic
+router.get('/segments/all', auth, async (req, res) => {
+  try {
+    const segments = await Customer.aggregate([
+      { $match: { segment: { $exists: true, $ne: null } } },
+      { $group: { _id: "$segment", count: { $sum: 1 }, totalRevenue: { $sum: "$annualRevenue" } } }
+    ]);
+    res.json(segments.map(s => ({ segment: s._id, count: s.count, totalRevenue: s.totalRevenue })));
+  } catch (err) {
+    res.status(500).send('Server error');
+  }
+});
+
+router.get('/tags/all', auth, async (req, res) => {
+  try {
+    const tags = await Customer.aggregate([
+      { $unwind: "$tags" },
+      { $group: { _id: "$tags", count: { $sum: 1 } } }
+    ]);
+    res.json(tags.map(t => ({ tag: t._id, count: t.count })));
+  } catch (err) {
+    res.status(500).send('Server error');
+  }
+});
+
+router.post('/:id/tags', auth, async (req, res) => {
+  try {
+    const { tags } = req.body;
+    const customer = await Customer.findByIdAndUpdate(req.params.id, { $addToSet: { tags: { $each: tags } } }, { new: true });
+    res.json(customer);
+  } catch (err) {
+    res.status(500).send('Server error');
+  }
+});
+
+router.delete('/:id/tags/:tag', auth, async (req, res) => {
+  try {
+    const customer = await Customer.findByIdAndUpdate(req.params.id, { $pull: { tags: req.params.tag } }, { new: true });
+    res.json(customer);
+  } catch (err) {
+    res.status(500).send('Server error');
+  }
+});
+
+router.put('/:id/segment', auth, async (req, res) => {
+  try {
+    const { segment } = req.body;
+    const customer = await Customer.findByIdAndUpdate(req.params.id, { segment }, { new: true });
+    res.json(customer);
+  } catch (err) {
     res.status(500).send('Server error');
   }
 });

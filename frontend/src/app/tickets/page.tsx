@@ -1,16 +1,16 @@
 import MainLayout from '@/layouts/MainLayout';
 import ProtectedRoute from '@/features/auth/components/ProtectedRoute';
-import TasksManagement from '@/features/tasks/components/TasksManagement';
+import TicketsManagement from '@/features/tickets/components/TicketsManagement';
 
 export const metadata = {
-    title: 'Tasks - Prodify CRM',
+    title: 'Support Tickets - Prodify CRM',
 };
 
-export default function TasksPage() {
+export default function TicketsPage() {
     return (
         <ProtectedRoute>
             <MainLayout>
-                <TasksManagement />
+                <TicketsManagement />
             </MainLayout>
         </ProtectedRoute>
     );

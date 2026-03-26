@@ -1,6 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-primary-dark: var(--brand-primary-dark);
+  --color-brand-primary-light: var(--brand-primary-light);
+  --color-brand-text-primary: var(--brand-text-primary);
+  --color-brand-text-secondary: var(--brand-text-secondary);
+  --color-brand-bg-surface: var(--brand-bg-surface);
+  --color-brand-success: var(--brand-success);
+  --color-brand-error: var(--brand-error);
+
+  --spacing-6_25: 25px;
+  --spacing-7_5: 30px;
+  --spacing-10: 40px;
+  --spacing-12_5: 50px;
+  --spacing-2_5: 10px;
+}
 
 :root {
   --background: #ffffff;

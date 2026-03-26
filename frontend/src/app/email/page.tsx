@@ -1,16 +1,16 @@
 import MainLayout from '@/layouts/MainLayout';
 import ProtectedRoute from '@/features/auth/components/ProtectedRoute';
-import TasksManagement from '@/features/tasks/components/TasksManagement';
+import EmailTemplates from '@/features/email/components/EmailTemplates';
 
 export const metadata = {
-    title: 'Tasks - Prodify CRM',
+    title: 'Email Templates - Prodify CRM',
 };
 
-export default function TasksPage() {
+export default function EmailPage() {
     return (
         <ProtectedRoute>
             <MainLayout>
-                <TasksManagement />
+                <EmailTemplates />
             </MainLayout>
         </ProtectedRoute>
     );

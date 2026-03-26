@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { FaHome, FaBox, FaListAlt, FaShoppingCart, FaUsers, FaChartLine, FaCog, FaQuestionCircle, FaInfoCircle, FaUserShield, FaTasks } from "react-icons/fa";
-import { SiMarketo } from "react-icons/si";
+import { FaHome, FaBox, FaListAlt, FaShoppingCart, FaUsers, FaChartLine, FaCog, FaQuestionCircle, FaInfoCircle, FaUserShield, FaTasks, FaDollarSign, FaChartPie, FaEnvelope } from "react-icons/fa";
+import { SiMarko } from "react-icons/si";
 import { useAuth } from '@/providers/AuthProvider';
 
 interface SidebarProps {
@@ -19,10 +19,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
         { name: "Dashboard", icon: <FaHome />, path: "/" },
         { name: "Inventory", icon: <FaBox />, path: "/inventory" },
         { name: "Orders", icon: <FaShoppingCart />, path: "/orders" },
-        { name: "Tenders", icon: <SiMarketo />, path: "/tenders" },
+        { name: "Invoices", icon: <FaDollarSign />, path: "/invoices" },
+        { name: "Tenders", icon: <SiMarko />, path: "/tenders" },
         { name: "Products", icon: <FaListAlt />, path: "/products" },
+        { name: "Leads", icon: <FaUsers />, path: "/leads" },
+        { name: "Pipeline", icon: <FaChartLine />, path: "/pipeline" },
         { name: "Tasks", icon: <FaTasks />, path: "/tasks" },
+        { name: "Tickets", icon: <FaQuestionCircle />, path: "/tickets" },
+        { name: "Email", icon: <FaEnvelope />, path: "/email" },
         { name: "Customers", icon: <FaUsers />, path: "/customers" },
+        { name: "Segments", icon: <FaChartPie />, path: "/segments" },
         { name: "Reports", icon: <FaChartLine />, path: "/reports" },
         { name: "Analytics", icon: <FaChartLine />, path: "/analytics" },
         { name: "About", icon: <FaInfoCircle />, path: "/about" },

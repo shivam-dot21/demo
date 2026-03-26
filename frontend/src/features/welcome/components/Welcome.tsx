@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import HeroScene from "./HeroScene";
 
 const Welcome = () => {
     const [hoveredButton, setHoveredButton] = useState<string | null>(null);
@@ -27,7 +28,7 @@ const Welcome = () => {
     };
 
     return (
-        <div className="min-h-screen w-full bg-white flex flex-col items-center overflow-x-hidden" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
+        <div className="min-h-screen w-full bg-transparent flex flex-col items-center overflow-x-hidden" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500;600&display=swap');
                 
@@ -49,11 +50,8 @@ const Welcome = () => {
                 }
             `}</style>
 
-            {/* Background Decorations */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-brand-primary/10 blur-[120px] opacity-40 animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-brand-primary-light/20 blur-[120px] opacity-40 animate-pulse" />
-            </div>
+            {/* 3D Background Scene */}
+            <HeroScene />
 
             {/* Header */}
             <header className="w-full max-w-[1400px] px-8 h-20 flex justify-between items-center relative z-50">

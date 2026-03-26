@@ -1,6 +1,6 @@
 import MainLayout from '@/layouts/MainLayout';
 import ProtectedRoute from '@/features/auth/components/ProtectedRoute';
-import ReportGeneration from '@/features/reports/components/ReportGeneration';
+import Reports from '@/features/reports/components/Reports';
 
 export const metadata = {
     title: 'Reports - Prodify CRM',
@@ -10,7 +10,7 @@ export default function ReportsPage() {
     return (
         <ProtectedRoute>
             <MainLayout>
-                <ReportGeneration />
+                <Reports />
             </MainLayout>
         </ProtectedRoute>
     );
