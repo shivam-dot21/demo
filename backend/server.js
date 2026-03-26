@@ -92,6 +92,8 @@ app.use('/api/messages', require('./routes/messages'));
 app.use('/api/notes', require('./routes/notes'));
 app.use('/api/tenders', require('./routes/tenders'));
 app.use('/api/tasks', require('./routes/tasks'));
+app.use('/api/documents', require('./routes/documents'));
+app.use('/api/contracts', require('./routes/contracts'));
 
 // Keycloak authentication routes (if configured)
 if (keycloakRoutes) {

@@ -40,6 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
                 { name: "Analytics", icon: <FaChartLine />, path: "/analytics" },
                 { name: "Reports", icon: <FaChartLine />, path: "/reports" },
                 { name: "Customers", icon: <FaUsers />, path: "/customers" },
+                { name: "Contracts", icon: <FaListAlt />, path: "/contracts" },
             ];
         }
 
@@ -48,6 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
                 ...commonItems,
                 { name: "Leads", icon: <FaUsers />, path: "/leads" },
                 { name: "Pipeline", icon: <FaChartLine />, path: "/pipeline" },
+                { name: "Contracts", icon: <FaListAlt />, path: "/contracts" },
                 { name: "Tasks", icon: <FaTasks />, path: "/tasks" },
             ];
         }
@@ -57,6 +59,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
                 ...commonItems,
                 { name: "Reports", icon: <FaChartLine />, path: "/reports" },
                 { name: "Analytics", icon: <FaChartLine />, path: "/analytics" },
+                { name: "Contracts", icon: <FaListAlt />, path: "/contracts" },
                 { name: "Tasks", icon: <FaTasks />, path: "/tasks" },
                 { name: "Admin Panel", icon: <FaUserShield />, path: "/admin" },
             ];
@@ -67,6 +70,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
                 ...commonItems,
                 { name: "Tickets", icon: <FaQuestionCircle />, path: "/tickets" },
                 { name: "Customers", icon: <FaUsers />, path: "/customers" },
+                { name: "Contracts", icon: <FaListAlt />, path: "/contracts" },
             ];
         }
 

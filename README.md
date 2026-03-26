@@ -27,16 +27,16 @@ A comprehensive, full-stack Customer Relationship Management (CRM) system built 
 ## ✨ Features
 
 ### Core Functionality
-- **👤 User Authentication & Authorization** - Secure JWT-based authentication with role-based access control (Admin, User)
+- **👤 User Authentication & RBAC** - Secure JWT-based authentication with granular Role-Based Access Control (CEO, Sales, Manager, Support, Admin)
 - **👥 Customer Management** - Complete CRUD operations for customer information, contact details, and status tracking
-- **📦 Product Catalog** - Comprehensive product management with categories, pricing, and inventory tracking
-- **🛒 Order Processing** - Streamlined order creation, tracking, and status management
-- **📊 Inventory Tracking** - Real-time inventory management with stock level monitoring
+- **📄 Document Management (New)** - Integrated system to handle file uploads (PDF, Images, Word) for customers, deals, and contracts with in-browser preview
+- **🤝 Contracts Module (New)** - Dedicated tracking for business agreements, linked to customers and sales pipeline
+- **📊 Sales Pipeline** - Drag-and-drop Kanban board for managing deals across different stages
 - **📈 Analytics & Reporting** - Interactive charts and dashboards for data-driven insights
+- **🔐 Admin Panel** - Administrative controls, user management, and system-wide settings
 
 ### Additional Features
 - **🎯 Lead Management** - Track, score, and convert leads to customers
-- **📊 Sales Pipeline** - Drag-and-drop Kanban board for managing deals
 - **✅ Task Management** - Daily workflow tracking with list and calendar views
 - **🕒 Contact Timeline** - Centralized activity logging and interaction history
 - **💵 Invoice & Billing** - Generate PDF invoices and track payment statuses
@@ -47,8 +47,6 @@ A comprehensive, full-stack Customer Relationship Management (CRM) system built 
 - **📝 Notes & Notifications** - Internal communication and activity tracking
 - **💬 Messages** - Customer communication history and management
 - **⚙️ Settings** - Customizable system preferences and profile management
-- **🆘 Support** - Help resources and system documentation
-- **🔐 Admin Panel** - Administrative controls and user management
 
 ---
 
@@ -57,202 +55,101 @@ A comprehensive, full-stack Customer Relationship Management (CRM) system built 
 ### Frontend
 | Technology | Purpose |
 |------------|---------|
-| **React 19** | Modern React with hooks and functional components |
-| **React Router DOM** | Client-side routing and navigation |
-| **Vite** | Fast build tool and development server |
-| **Chart.js** | Interactive charts and data visualization |
-| **React ChartJS 2** | React wrapper for Chart.js |
-| **Axios** | HTTP client for API requests |
-| **date-fns** | Date formatting and manipulation |
-| **Lucide React** | Beautiful icons |
-| **React Icons** | Icon library |
-| **ESLint** | Code linting and quality assurance |
+| **Next.js 15 (App Dir)** | Modern React framework with server/client components |
+| **Dnd-kit** | Modular drag-and-drop toolkit for the Sales Pipeline |
+| **React Icons** | Icon library for a modern, sleek interface |
+| **Axios** | HTTP client for reliable API communication |
+| **Chart.js** | Visual data representation for analytics |
 
 ### Backend
 | Technology | Purpose |
 |------------|---------|
-| **Node.js** | Server-side JavaScript runtime |
-| **Express.js 5** | Web application framework |
-| **MongoDB** | NoSQL database |
-| **Mongoose** | MongoDB object modeling (ODM) |
-| **JWT** | JSON Web Tokens for authentication |
-| **bcryptjs** | Password hashing and validation |
-| **Nodemailer** | Email sending capability |
-| **CORS** | Cross-Origin Resource Sharing |
-| **dotenv** | Environment variable management |
+| **Node.js & Express.js** | Robust server-side framework |
+| **MongoDB & Mongoose** | NoSQL database with structured schema modeling |
+| **Multer** | Middleware for handling multipart/form-data for file uploads |
+| **JWT** | Secure token-based authentication and role enforcement |
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Structure (Detailed)
 
-```
-prodify-crm/
-├── asset/                          # Static assets
-│   └── img/                        # Project screenshots
-│       ├── Home_Page.png
-│       ├── Sidebar.png
-│       ├── Signin_Page.png
-│       ├── Signup_Page.png
-│       └── Welcome_Page.png
-├── frontend/                       # React frontend application
-│   ├── public/                     # Static public assets
-│   ├── src/
-│   │   ├── app/                    # Next.js/App directory structure (pages)
-│   │   │   ├── about/
-│   │   │   ├── admin/
-│   │   │   ├── analytics/
-│   │   │   ├── auth/
-│   │   │   ├── customers/
-│   │   │   ├── dashboard/
-│   │   │   ├── email/
-│   │   │   ├── forgot-password/
-│   │   │   ├── inventory/
-│   │   │   ├── invoices/
-│   │   │   ├── leads/
-│   │   │   ├── login/
-│   │   │   ├── messages/
-│   │   │   ├── notes/
-│   │   │   ├── notifications/
-│   │   │   ├── orders/
-│   │   │   ├── pipeline/
-│   │   │   ├── products/
-│   │   │   ├── profile/
-│   │   │   ├── reports/
-│   │   │   ├── reset-password/
-│   │   │   ├── segments/
-│   │   │   ├── settings/
-│   │   │   ├── signup/
-│   │   │   ├── support/
-│   │   │   ├── tasks/
-│   │   │   ├── tenders/
-│   │   │   ├── tickets/
-│   │   │   └── welcome/
-│   │   ├── features/               # Domain-driven features
-│   │   │   ├── about/
-│   │   │   ├── admin/
-│   │   │   ├── analytics/
-│   │   │   ├── auth/
-│   │   │   ├── customers/
-│   │   │   ├── dashboard/
-│   │   │   ├── email/
-│   │   │   ├── inventory/
-│   │   │   ├── invoices/
-│   │   │   ├── leads/
-│   │   │   ├── messages/
-│   │   │   ├── notes/
-│   │   │   ├── notifications/
-│   │   │   ├── orders/
-│   │   │   ├── pipeline/
-│   │   │   ├── products/
-│   │   │   ├── profile/
-│   │   │   ├── reports/
-│   │   │   ├── settings/
-│   │   │   ├── support/
-│   │   │   ├── tasks/
-│   │   │   ├── tenders/
-│   │   │   ├── tickets/
-│   │   │   └── welcome/
-│   │   ├── shared/                 # Shared components
-│   │   ├── core/                   # API clients and utilities
-│   │   ├── assets/                 # Application assets
-│   │   ├── components/             # Legacy React components (if any)
-│   │   ├── contexts/               # React contexts
-│   │   └── utils/                  # Utility functions
-│   ├── .env.local                  # Environment configuration
-│   ├── eslint.config.mjs           # ESLint configuration
-│   ├── next.config.ts              # Next.js configuration
-│   ├── tailwind.config.js          # Tailwind CSS settings
-│   ├── postcss.config.js           # PostCSS configuration
-│   ├── tsconfig.json               # TypeScript configuration
-│   └── package.json                # Frontend dependencies
-├── backend/                        # Node.js backend API
-│   ├── models/                     # Mongoose data models
-│   │   ├── Activity.js
-│   │   ├── Customer.js
-│   │   ├── Deal.js
-│   │   ├── EmailTemplate.js
-│   │   ├── Inventory.js
-│   │   ├── Invoice.js
-│   │   ├── Lead.js
-│   │   ├── Message.js
-│   │   ├── Note.js
-│   │   ├── Notification.js
-│   │   ├── Order.js
-│   │   ├── Product.js
-│   │   ├── Task.js
-│   │   ├── Ticket.js
-│   │   └── User.js
-│   ├── routes/                     # API route handlers
-│   │   ├── activities.js
-│   │   ├── admin.js
-│   │   ├── analytics.js
-│   │   ├── auth.js
-│   │   ├── customers.js
-│   │   ├── deals.js
-│   │   ├── emailTemplates.js
-│   │   ├── inventory.js
-│   │   ├── invoices.js
-│   │   ├── keycloakAuth.js
-│   │   ├── leads.js
-│   │   ├── messages.js
-│   │   ├── notes.js
-│   │   ├── notifications.js
-│   │   ├── orders.js
-│   │   ├── products.js
-│   │   ├── tasks.js
-│   │   ├── tenders.js
-│   │   └── tickets.js
-│   ├── config/                     # Backend configurations
-│   ├── middleware/                 # Custom middleware (auth, adminAuth)
-│   ├── uploads/                    # File uploads directory
-│   ├── seedAdmin.js                # Default admin seed script
-│   ├── server.js                   # Main server entry point
-│   ├── .env                        # Environment configurations
-│   ├── package.json                # Backend dependencies
-│   └── README.md                   # Backend documentation
-├── .gitignore                      # Git ignore rules
-└── README.md                       # This file
+```text
+.
+  |docker-compose.keycloak.yml
+  |README.md
+  |frontend/
+  |  |next.config.ts
+  |  |package.json
+  |  |src/
+  |  |  |app/
+  |  |  |  |reports/page.tsx
+  |  |  |  |notifications/page.tsx
+  |  |  |  |admin/page.tsx
+  |  |  |  |tickets/page.tsx
+  |  |  |  |analytics/page.tsx
+  |  |  |  |tasks/page.tsx
+  |  |  |  |settings/page.tsx
+  |  |  |  |tenders/page.tsx
+  |  |  |  |dashboard/
+  |  |  |  |  |manager/
+  |  |  |  |  |ceo/
+  |  |  |  |  |sales/
+  |  |  |  |  |support/
+  |  |  |  |contracts/page.tsx
+  |  |  |  |pipeline/page.tsx
+  |  |  |  |customers/page.tsx
+  |  |  |  |...
+  |  |  |features/
+  |  |  |  |admin/components/AdminPanel.tsx
+  |  |  |  |analytics/components/AnalyticsDashboard.tsx
+  |  |  |  |auth/components/ProtectedRoute.tsx
+  |  |  |  |contracts/components/ContractManagement.tsx
+  |  |  |  |customers/components/CustomerManagement.tsx
+  |  |  |  |documents/components/DocumentManager.tsx
+  |  |  |  |pipeline/components/PipelineManagement.tsx
+  |  |  |  |tasks/components/TasksManagement.tsx
+  |  |  |  |...
+  |  |  |shared/
+  |  |  |  |components/Sidebar.tsx
+  |  |  |  |components/Navbar.tsx
+  |  |  |  |...
+  |backend/
+  |  |server.js
+  |  |seedAdmin.js
+  |  |models/
+  |  |  |User.js
+  |  |  |Document.js
+  |  |  |Contract.js
+  |  |  |Customer.js
+  |  |  |Deal.js
+  |  |  |...
+  |  |routes/
+  |  |  |auth.js
+  |  |  |customers.js
+  |  |  |deals.js
+  |  |  |documents.js
+  |  |  |contracts.js
+  |  |  |...
+  |  |middleware/
+  |  |  |auth.js
+  |  |  |roleAuth.js
+  |  |uploads/
+  |  |  |documents/
+  |  |  |products/
+  |  |  |avatars/
 ```
 
 ---
 
 ## 📸 Screenshots
 
-### Welcome Page
-![Welcome Page](asset/img/Welcome_Page.png)
-*The landing page introducing users to the CRM system with modern, clean design*
+### Contracts & Document Management
+![Contracts Management](asset/img/Contracts_Page.png)
+*Track agreements and manage their associated documents in a centralized view.*
 
-### Sign Up Page
-![Sign Up Page](asset/img/Signup_Page.png)
-*User registration form with validation and secure password requirements*
-
-### Sign In Page
-![Sign In Page](asset/img/Signin_Page.png)
-*Secure login interface with JWT-based authentication*
-
-### Dashboard Home
-![Home Page](asset/img/Home_Page.png)
-*Main dashboard displaying key metrics, revenue charts, and recent activities*
-
-### Navigation Sidebar
-![Sidebar](asset/img/Sidebar.png)
-*Intuitive navigation menu with collapsible sidebar for all CRM modules*
-
-### Leads Dashboard (New)
-![Leads Page](asset/img/Leads_Page.png)
-*Lead management with status tracking, lead scoring, and customer conversion flow*
-
-### Sales Pipeline (New)
-![Pipeline Page](asset/img/Pipeline_Page.png)
-*Drag-and-drop Kanban board for progressing deals across stages*
-
-### Customer Segments (New)
-![Segments Page](asset/img/Segments_Page.png)
-*Deep dive into customer metrics, value, and tag-based segmentation*
-
-### Reports & Analytics (New)
-![Reports Page](asset/img/Reports_Page.png)
-*Advanced reporting with interactive graphs and full CSV export capabilities*
+### Customer Profile / Deal Details
+![Document Integration](asset/img/Document_Upload.png)
+*Upload reports, proposals, and customer IDs directly within contextual modals.*
 
 ---
 
@@ -401,159 +298,32 @@ The application will be available at `http://localhost:5000`
 
 ## 📡 API Documentation
 
-For detailed API documentation, see the [Backend README](./backend/README.md)
-
-### Key API Endpoints
-
-#### Authentication
+### Document Management
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/auth/register` | Register new user |
-| POST | `/api/auth/login` | User login |
-| POST | `/api/auth/forgot-password` | Request password reset |
-| POST | `/api/auth/reset-password` | Reset password |
+| POST | `/api/documents/upload` | Upload a new file (Max 5MB) |
+| GET | `/api/documents/:relatedId` | Get all documents for a specific entity |
+| DELETE | `/api/documents/:id` | Delete a document |
 
-#### Customers
+### Contract Management
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/customers` | List all customers |
-| GET | `/api/customers/:id` | Get customer by ID |
-| POST | `/api/customers` | Create new customer |
-| PUT | `/api/customers/:id` | Update customer |
-| DELETE | `/api/customers/:id` | Delete customer |
-
-#### Products
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/products` | List all products |
-| GET | `/api/products/:id` | Get product by ID |
-| POST | `/api/products` | Create new product |
-| PUT | `/api/products/:id` | Update product |
-| DELETE | `/api/products/:id` | Delete product |
-
-#### Orders
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/orders` | List all orders |
-| GET | `/api/orders/:id` | Get order by ID |
-| POST | `/api/orders` | Create new order |
-| PUT | `/api/orders/:id` | Update order status |
-| DELETE | `/api/orders/:id` | Delete order |
-
-#### Analytics
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/analytics/dashboard` | Dashboard analytics |
-| GET | `/api/analytics/sales` | Sales data and trends |
-
-
-### Authentication
-
-Most endpoints require JWT authentication. Include the token in the Authorization header:
-
-```http
-Authorization: Bearer <your_jwt_token>
-```
+| GET | `/api/contracts` | List all contracts |
+| POST | `/api/contracts` | Create a new contract |
+| GET | `/api/contracts/:id` | Get contract details |
+| PUT | `/api/contracts/:id` | Update contract status/info |
 
 ---
 
-## 🔐 Environment Variables
+## 🔐 Credentials & Roles
 
-### Backend Variables
+The system uses a granular RBAC system. You can test these default users with the password **`password123`**:
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `PORT` | No | 5000 | Server port number |
-| `NODE_ENV` | No | development | Environment mode |
-| `MONGODB_URI` | Yes | - | MongoDB connection string |
-| `JWT_SECRET` | Yes | - | JWT signing secret |
-| `JWT_EXPIRE` | No | 7d | JWT expiration time |
-| `INITIAL_ADMIN_EMAIL` | No | admin@prodify.com | Initial admin email |
-| `INITIAL_ADMIN_PASSWORD` | No | admin123 | Initial admin password |
-| `EMAIL_SERVICE` | No | - | Email service provider |
-| `EMAIL_USER` | No | - | Email username |
-| `EMAIL_PASS` | No | - | Email password |
-| `CORS_ORIGINS` | No | localhost:5173 | Allowed CORS origins |
-
----
-
-## 🧪 Testing
-
-Run the test suites:
-
-```bash
-# Backend tests
-cd backend
-npm test
-
-# Frontend tests
-cd frontend
-npm test
-```
-
----
-
-## 📦 Deployment
-
-### Frontend Deployment
-
-Deploy the frontend to any static hosting service:
-
-```bash
-cd frontend
-npm run build
-# Deploy the dist/ folder to:
-# - Vercel
-# - Netlify
-# - AWS S3
-# - GitHub Pages
-```
-
-### Backend Deployment
-
-Deploy the backend to your preferred Node.js hosting service:
-
-```bash
-cd backend
-npm start
-# Deploy to:
-# - Heroku
-# - Render
-# - Railway
-# - AWS EC2
-# - DigitalOcean
-```
-
-> ⚠️ Ensure all environment variables are properly configured in your hosting environment!
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. **Fork the repository**
-2. **Create your feature branch** (`git checkout -b feature/AmazingFeature`)
-3. **Commit your changes** (`git commit -m 'Add some AmazingFeature'`)
-4. **Push to the branch** (`git push origin feature/AmazingFeature`)
-5. **Open a Pull Request**
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 📞 Support
-
-For support and questions:
-
-- 📧 Email: support@prodify.com
-- 📖 Documentation: Check the `/docs` folder
-- 🐛 Issues: Create an issue in the repository
-- 💬 Discussions: Use the GitHub Discussions feature
+- **CEO**: `ceo@prodify.com`
+- **Sales Rep**: `sales@prodify.com`
+- **Manager**: `manager@prodify.com`
+- **Support**: `support@prodify.com`
+- **Admin**: `admin@prodify.com` (Bypasses all role checks)
 
 ---
 
@@ -569,4 +339,4 @@ For support and questions:
 
 **Built with ❤️ by the Prodify Development Team**
 
-Happy CRM Management! 🎉# demo
+Happy CRM Management! 🎉
