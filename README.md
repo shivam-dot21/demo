@@ -35,6 +35,15 @@ A comprehensive, full-stack Customer Relationship Management (CRM) system built 
 - **📈 Analytics & Reporting** - Interactive charts and dashboards for data-driven insights
 
 ### Additional Features
+- **🎯 Lead Management** - Track, score, and convert leads to customers
+- **📊 Sales Pipeline** - Drag-and-drop Kanban board for managing deals
+- **✅ Task Management** - Daily workflow tracking with list and calendar views
+- **🕒 Contact Timeline** - Centralized activity logging and interaction history
+- **💵 Invoice & Billing** - Generate PDF invoices and track payment statuses
+- **🎯 Customer Segmentation** - Tag-based segmentation and revenue analysis
+- **📈 Advanced Reports & Exports** - Export data to CSV and view detailed analytics charts
+- **🎫 Support Tickets** - Customer case management with conversation threads
+- **📧 Email Integration** - Manage templates and simulate email campaigns
 - **📝 Notes & Notifications** - Internal communication and activity tracking
 - **💬 Messages** - Customer communication history and management
 - **⚙️ Settings** - Customizable system preferences and profile management
@@ -88,53 +97,117 @@ prodify-crm/
 ├── frontend/                       # React frontend application
 │   ├── public/                     # Static public assets
 │   ├── src/
+│   │   ├── app/                    # Next.js/App directory structure (pages)
+│   │   │   ├── about/
+│   │   │   ├── admin/
+│   │   │   ├── analytics/
+│   │   │   ├── auth/
+│   │   │   ├── customers/
+│   │   │   ├── dashboard/
+│   │   │   ├── email/
+│   │   │   ├── forgot-password/
+│   │   │   ├── inventory/
+│   │   │   ├── invoices/
+│   │   │   ├── leads/
+│   │   │   ├── login/
+│   │   │   ├── messages/
+│   │   │   ├── notes/
+│   │   │   ├── notifications/
+│   │   │   ├── orders/
+│   │   │   ├── pipeline/
+│   │   │   ├── products/
+│   │   │   ├── profile/
+│   │   │   ├── reports/
+│   │   │   ├── reset-password/
+│   │   │   ├── segments/
+│   │   │   ├── settings/
+│   │   │   ├── signup/
+│   │   │   ├── support/
+│   │   │   ├── tasks/
+│   │   │   ├── tenders/
+│   │   │   ├── tickets/
+│   │   │   └── welcome/
+│   │   ├── features/               # Domain-driven features
+│   │   │   ├── about/
+│   │   │   ├── admin/
+│   │   │   ├── analytics/
+│   │   │   ├── auth/
+│   │   │   ├── customers/
+│   │   │   ├── dashboard/
+│   │   │   ├── email/
+│   │   │   ├── inventory/
+│   │   │   ├── invoices/
+│   │   │   ├── leads/
+│   │   │   ├── messages/
+│   │   │   ├── notes/
+│   │   │   ├── notifications/
+│   │   │   ├── orders/
+│   │   │   ├── pipeline/
+│   │   │   ├── products/
+│   │   │   ├── profile/
+│   │   │   ├── reports/
+│   │   │   ├── settings/
+│   │   │   ├── support/
+│   │   │   ├── tasks/
+│   │   │   ├── tenders/
+│   │   │   ├── tickets/
+│   │   │   └── welcome/
+│   │   ├── shared/                 # Shared components
+│   │   ├── core/                   # API clients and utilities
 │   │   ├── assets/                 # Application assets
-│   │   ├── components/             # React components
-│   │   │   ├── charts/             # Analytics chart components
-│   │   │   │   ├── CustomerChart.jsx
-│   │   │   │   ├── OrderStatusChart.jsx
-│   │   │   │   ├── RevenueChart.jsx
-│   │   │   │   └── SalesByCategoryChart.jsx
-│   │   │   ├── *.jsx               # Page and UI components
-│   │   │   └── *.css               # Component styles
-│   │   ├── contexts/               # React contexts (AuthContext, etc.)
-│   │   ├── utils/                  # Utility functions
-│   │   ├── App.jsx                 # Main application component
-│   │   ├── main.jsx                # Application entry point
-│   │   ├── index.css               # Global styles
-│   │   └── colors.js               # Color theme configuration
-│   ├── index.html                  # HTML entry point
-│   ├── package.json                # Frontend dependencies
-│   ├── vite.config.js              # Vite configuration
-│   └── eslint.config.js            # ESLint configuration
+│   │   ├── components/             # Legacy React components (if any)
+│   │   ├── contexts/               # React contexts
+│   │   └── utils/                  # Utility functions
+│   ├── .env.local                  # Environment configuration
+│   ├── eslint.config.mjs           # ESLint configuration
+│   ├── next.config.ts              # Next.js configuration
+│   ├── tailwind.config.js          # Tailwind CSS settings
+│   ├── postcss.config.js           # PostCSS configuration
+│   ├── tsconfig.json               # TypeScript configuration
+│   └── package.json                # Frontend dependencies
 ├── backend/                        # Node.js backend API
 │   ├── models/                     # Mongoose data models
-│   │   ├── Customer.js             # Customer schema
-│   │   ├── Inventory.js            # Inventory schema
-│   │   ├── Message.js              # Message schema
-│   │   ├── Note.js                 # Note schema
-│   │   ├── Notification.js         # Notification schema
-│   │   ├── Order.js                # Order schema
-│   │   ├── Product.js              # Product schema
-│   │   └── User.js                 # User schema
+│   │   ├── Activity.js
+│   │   ├── Customer.js
+│   │   ├── Deal.js
+│   │   ├── EmailTemplate.js
+│   │   ├── Inventory.js
+│   │   ├── Invoice.js
+│   │   ├── Lead.js
+│   │   ├── Message.js
+│   │   ├── Note.js
+│   │   ├── Notification.js
+│   │   ├── Order.js
+│   │   ├── Product.js
+│   │   ├── Task.js
+│   │   ├── Ticket.js
+│   │   └── User.js
 │   ├── routes/                     # API route handlers
-│   │   ├── admin.js                # Admin-specific routes
-│   │   ├── analytics.js            # Analytics and reporting
-│   │   ├── auth.js                 # Authentication routes
-│   │   ├── customers.js            # Customer management
-│   │   ├── inventory.js            # Inventory operations
-│   │   ├── messages.js             # Messaging system
-│   │   ├── notes.js                # Notes management
-│   │   ├── notifications.js        # Notification handling
-│   │   ├── orders.js               # Order processing
-│   │   └── products.js             # Product management
-│   ├── middleware/                 # Custom middleware
-│   │   ├── adminAuth.js            # Admin authentication
-│   │   └── auth.js                 # JWT authentication
-│   ├── seedAdmin.js                # Admin user seeding
-│   ├── seedCustomers.js            # Customer data seeding
-│   │   ├── seedOrders.js           # Order data seeding
+│   │   ├── activities.js
+│   │   ├── admin.js
+│   │   ├── analytics.js
+│   │   ├── auth.js
+│   │   ├── customers.js
+│   │   ├── deals.js
+│   │   ├── emailTemplates.js
+│   │   ├── inventory.js
+│   │   ├── invoices.js
+│   │   ├── keycloakAuth.js
+│   │   ├── leads.js
+│   │   ├── messages.js
+│   │   ├── notes.js
+│   │   ├── notifications.js
+│   │   ├── orders.js
+│   │   ├── products.js
+│   │   ├── tasks.js
+│   │   ├── tenders.js
+│   │   └── tickets.js
+│   ├── config/                     # Backend configurations
+│   ├── middleware/                 # Custom middleware (auth, adminAuth)
+│   ├── uploads/                    # File uploads directory
+│   ├── seedAdmin.js                # Default admin seed script
 │   ├── server.js                   # Main server entry point
+│   ├── .env                        # Environment configurations
 │   ├── package.json                # Backend dependencies
 │   └── README.md                   # Backend documentation
 ├── .gitignore                      # Git ignore rules
@@ -164,6 +237,22 @@ prodify-crm/
 ### Navigation Sidebar
 ![Sidebar](asset/img/Sidebar.png)
 *Intuitive navigation menu with collapsible sidebar for all CRM modules*
+
+### Leads Dashboard (New)
+![Leads Page](asset/img/Leads_Page.png)
+*Lead management with status tracking, lead scoring, and customer conversion flow*
+
+### Sales Pipeline (New)
+![Pipeline Page](asset/img/Pipeline_Page.png)
+*Drag-and-drop Kanban board for progressing deals across stages*
+
+### Customer Segments (New)
+![Segments Page](asset/img/Segments_Page.png)
+*Deep dive into customer metrics, value, and tag-based segmentation*
+
+### Reports & Analytics (New)
+![Reports Page](asset/img/Reports_Page.png)
+*Advanced reporting with interactive graphs and full CSV export capabilities*
 
 ---
 
