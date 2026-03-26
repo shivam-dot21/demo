@@ -16,8 +16,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'employee', 'manager', 'tl'],
-    default: 'employee',
+    enum: ['CEO', 'Sales', 'Manager', 'Support', 'admin'],
+    default: 'Sales',
   },
   // Keycloak authentication fields
   keycloakId: {

@@ -15,30 +15,67 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
     const { user } = useAuth();
 
-    const baseMenuItems = [
-        { name: "Dashboard", icon: <FaHome />, path: "/" },
-        { name: "Inventory", icon: <FaBox />, path: "/inventory" },
-        { name: "Orders", icon: <FaShoppingCart />, path: "/orders" },
-        { name: "Invoices", icon: <FaDollarSign />, path: "/invoices" },
-        { name: "Tenders", icon: <SiMarko />, path: "/tenders" },
-        { name: "Products", icon: <FaListAlt />, path: "/products" },
-        { name: "Leads", icon: <FaUsers />, path: "/leads" },
-        { name: "Pipeline", icon: <FaChartLine />, path: "/pipeline" },
-        { name: "Tasks", icon: <FaTasks />, path: "/tasks" },
-        { name: "Tickets", icon: <FaQuestionCircle />, path: "/tickets" },
-        { name: "Email", icon: <FaEnvelope />, path: "/email" },
-        { name: "Customers", icon: <FaUsers />, path: "/customers" },
-        { name: "Segments", icon: <FaChartPie />, path: "/segments" },
-        { name: "Reports", icon: <FaChartLine />, path: "/reports" },
-        { name: "Analytics", icon: <FaChartLine />, path: "/analytics" },
-        { name: "About", icon: <FaInfoCircle />, path: "/about" },
-        { name: "Support", icon: <FaQuestionCircle />, path: "/support" },
-        { name: "Settings", icon: <FaCog />, path: "/settings" },
-    ];
+    const menuItems = (() => {
+        const role = user?.role || '';
+        
+        const dashboardItem = { 
+            name: "Dashboard", 
+            icon: <FaHome />, 
+            path: role === 'CEO' ? '/dashboard/ceo' : 
+                  role === 'Sales' ? '/dashboard/sales' : 
+                  role === 'Manager' ? '/dashboard/manager' : 
+                  role === 'Support' ? '/dashboard/support' : '/' 
+        };
 
-    const menuItems = user?.role === 'admin'
-        ? [...baseMenuItems, { name: "Admin Panel", icon: <FaUserShield />, path: "/admin" }]
-        : baseMenuItems;
+        const commonItems = [
+            dashboardItem,
+            { name: "About", icon: <FaInfoCircle />, path: "/about" },
+            { name: "Support", icon: <FaQuestionCircle />, path: "/support" },
+            { name: "Settings", icon: <FaCog />, path: "/settings" },
+        ];
+
+        if (role === 'CEO') {
+            return [
+                ...commonItems,
+                { name: "Analytics", icon: <FaChartLine />, path: "/analytics" },
+                { name: "Reports", icon: <FaChartLine />, path: "/reports" },
+                { name: "Customers", icon: <FaUsers />, path: "/customers" },
+            ];
+        }
+
+        if (role === 'Sales') {
+            return [
+                ...commonItems,
+                { name: "Leads", icon: <FaUsers />, path: "/leads" },
+                { name: "Pipeline", icon: <FaChartLine />, path: "/pipeline" },
+                { name: "Tasks", icon: <FaTasks />, path: "/tasks" },
+            ];
+        }
+
+        if (role === 'Manager') {
+            return [
+                ...commonItems,
+                { name: "Reports", icon: <FaChartLine />, path: "/reports" },
+                { name: "Analytics", icon: <FaChartLine />, path: "/analytics" },
+                { name: "Tasks", icon: <FaTasks />, path: "/tasks" },
+                { name: "Admin Panel", icon: <FaUserShield />, path: "/admin" },
+            ];
+        }
+
+        if (role === 'Support') {
+            return [
+                ...commonItems,
+                { name: "Tickets", icon: <FaQuestionCircle />, path: "/tickets" },
+                { name: "Customers", icon: <FaUsers />, path: "/customers" },
+            ];
+        }
+
+        if (role === 'admin') {
+            return [...commonItems, { name: "Admin Panel", icon: <FaUserShield />, path: "/admin" }];
+        }
+
+        return commonItems;
+    })();
 
     return (
         <div

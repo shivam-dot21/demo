@@ -25,6 +25,17 @@ const LoginForm = () => {
         if (error) setError('');
     };
 
+    const getRedirectPath = (role: string) => {
+        const dashboardMap: Record<string, string> = {
+            'CEO': '/dashboard/ceo',
+            'Sales': '/dashboard/sales',
+            'Manager': '/dashboard/manager',
+            'Support': '/dashboard/support',
+            'admin': '/admin'
+        };
+        return dashboardMap[role] || '/';
+    };
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -32,8 +43,8 @@ const LoginForm = () => {
 
         const result = await login(formData.email, formData.password);
 
-        if (result.success) {
-            router.push("/");
+        if (result.success && result.user) {
+            router.push(getRedirectPath(result.user.role));
         } else {
             if (result.requiresKeycloak) {
                 setError('This account uses Keycloak. Please login with Keycloak SSO.');
@@ -50,8 +61,8 @@ const LoginForm = () => {
 
         const result = await loginWithKeycloak();
 
-        if (result.success) {
-            router.push("/");
+        if (result.success && result.user) {
+            router.push(getRedirectPath(result.user.role));
         } else {
             setError(result.error || 'Keycloak login failed');
         }

@@ -58,7 +58,7 @@ router.get('/callback', async (req, res) => {
           keycloakId,
           authProvider: 'keycloak',
           isWebsiteUser: true,
-          role: 'employee' // Default role for website users
+          role: 'Sales' // Default role for website users
         });
         await user.save();
       }
@@ -68,6 +68,7 @@ router.get('/callback', async (req, res) => {
     const payload = {
       user: {
         id: user.id,
+        role: user.role,
       },
     };
     

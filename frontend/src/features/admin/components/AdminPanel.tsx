@@ -175,8 +175,10 @@ const AdminPanel = () => {
                                     value={newUser.role}
                                     onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
                                 >
-                                    <option value="employee">Employee</option>
-                                    <option value="manager">Manager</option>
+                                    <option value="CEO">CEO</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="Sales">Sales Rep</option>
+                                    <option value="Support">Support</option>
                                     <option value="admin">Administrator</option>
                                 </select>
                             </div>
@@ -249,8 +251,10 @@ const AdminPanel = () => {
                                     <td className="p-4">
                                         {editingUser === u._id ? (
                                             <select className="w-full p-1.5 border border-brand-primary bg-white rounded outline-none text-sm" value={editForm.role} onChange={(e) => setEditForm({ ...editForm, role: e.target.value })}>
-                                                <option value="employee">Employee</option>
-                                                <option value="manager">Manager</option>
+                                                <option value="CEO">CEO</option>
+                                                <option value="Manager">Manager</option>
+                                                <option value="Sales">Sales</option>
+                                                <option value="Support">Support</option>
                                                 <option value="admin">Admin</option>
                                             </select>
                                         ) : (

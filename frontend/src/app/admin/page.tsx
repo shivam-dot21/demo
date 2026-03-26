@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function AdminPage() {
     return (
-        <ProtectedRoute requiredRole="admin">
+        <ProtectedRoute allowedRoles={['admin']}>
             <MainLayout>
                 <AdminPanel />
             </MainLayout>
